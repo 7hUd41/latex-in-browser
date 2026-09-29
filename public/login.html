@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Login — latex.thudal.com</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <header>
+    <span class="sub">latex.</span><a href="https://thudal.com/">thudal.com</a>
+  </header>
+
+  <main>
+    <nav>Login</nav>
+
+    <div class="text">
+      <p>A desk for LaTeX: text on the left, paper on the right.</p>
+      <p>It belongs to one person. If that is you, come in.</p>
+    </div>
+
+    <form method="post" action="/login">
+      <!--error-->
+      <label>
+        <span>Name</span>
+        <input type="text" name="user" autocomplete="username" autocapitalize="off" spellcheck="false" required autofocus>
+      </label>
+      <label>
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <button type="submit">Come in</button>
+    </form>
+  </main>
+
+  <footer>
+    <p>No trackers. One cookie, to remember it is you.</p>
+  </footer>
+</body>
+</html>

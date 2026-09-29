@@ -1,0 +1,105 @@
+/* Login page, in the style of thudal.com (same variables as its globals.css). */
+
+:root {
+  --bg: #b0cfd7;
+  --ink: #253121;
+  --line: #39793c;
+  --accent: #ef805f;
+  --font: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c2422;
+    --ink: #d9e3df;
+    --line: #6aa06d;
+    --accent: #ef805f;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font: 16px/1.5 var(--font);
+  color: var(--ink);
+  background: var(--bg);
+}
+
+a { color: inherit; text-decoration: underline; }
+a:hover { color: var(--bg); background: var(--ink); }
+
+header {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+}
+header a { font-style: italic; text-decoration: none; }
+header a:hover { text-decoration: none; }
+header .sub { font-style: italic; }
+
+main { flex-grow: 1; max-width: 60ch; }
+
+nav {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.text { padding: 2rem 1rem 0; }
+.text > * + * { margin-top: 1rem; }
+
+form { padding: 2rem 1rem; }
+form > * + * { margin-top: 1.5rem; }
+
+label { display: block; }
+label span { font-size: 0.875rem; text-transform: uppercase; }
+input {
+  margin-top: 0.25rem;
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.125rem 0;
+  outline: none;
+}
+input:focus { border-bottom-color: var(--ink); }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+button:hover { color: var(--bg); background: var(--ink); }
+
+.error { color: var(--accent); }
+
+footer {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

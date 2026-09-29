@@ -1,0 +1,786 @@
+/* Font: Fira Code with ligatures, everywhere. Served from public/fonts (OFL);
+   a local copy is used when installed. */
+@font-face { font-family: "Fira Code"; font-weight: 400; font-display: swap;
+  src: local("Fira Code"), local("FiraCode-Regular"), url(fonts/fira-code-latin-400-normal.woff2) format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Fira Code"; font-weight: 400; font-display: swap;
+  src: local("Fira Code"), local("FiraCode-Regular"), url(fonts/fira-code-latin-ext-400-normal.woff2) format("woff2");
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+@font-face { font-family: "Fira Code"; font-weight: 600; font-display: swap;
+  src: local("Fira Code SemiBold"), local("FiraCode-SemiBold"), url(fonts/fira-code-latin-600-normal.woff2) format("woff2"); }
+
+/* latex.thudal — editor layout.
+   Two themes: light (Ayu Light colours) and dark. All colours are variables. */
+
+:root,
+:root[data-theme="code"] {
+  /* Ayu Light */
+  --bg: #f8f9fa;            /* ui.bg */
+  --panel: #fafafa;         /* ui.panel.bg */
+  --popup: #ffffff;
+  --line: #6b7d8f1f;        /* ui.line */
+  --hover: #6b7d8f14;
+  --current: #6b7d8f24;     /* ui.selection.active */
+  --fg: #5c6166;            /* editor.fg */
+  --muted: #828e9f;         /* ui.fg */
+  --faint: #828e9f80;
+  --accent: #f29718;        /* common.accent.tint */
+  --accent-on: #5c3701;     /* text on accent (common.accent.on, darker) */
+  --ok: #6cbf43;            /* vcs.added */
+  --error: #e65050;         /* common.error */
+  --busy: #478acc;          /* vcs.modified */
+  --added: #6cbf43;
+  --removed: #ff7383;
+  --pdf-bg: #ebeef0;        /* surface.sunk */
+  --outer: #eef0f2;         /* around the panels */
+  --panel-border: #6b7d8f2e;
+  --page-shadow: 0 1px 4px #6b7d8f40;
+
+  --ed-bg: #fcfcfc;         /* editor.bg */
+  --ed-fg: #5c6166;
+  --ed-line: #828e9f1a;     /* editor.line */
+  --ed-selection: #035bd626;
+  --ed-selection-match: #035bd612;
+  --ed-find: #ffe294;
+  --ed-gutter: #828e9f66;
+  --ed-gutter-active: #828e9fcc;
+  --ed-cursor: #f29718;
+  --ed-match: #035bd626;
+
+  --syn-command: #fa8532;   /* keyword */
+  --syn-arg: #22a4e6;       /* entity */
+  --syn-math-delim: #e59645;/* special */
+  --syn-math: #86b300;      /* string */
+  --syn-number: #a37acc;    /* constant */
+  --syn-bracket: #828e9f;
+  --syn-comment: #adaeb1;   /* comment */
+
+  color-scheme: light;
+}
+
+:root[data-theme="code"][data-mode="dark"] {
+  --pdf-paper: #15171c;   /* the preview is recoloured in dark mode (not the download) */
+  --pdf-ink: #d4d4d0;
+  --bg: #15171c;
+  --panel: #111318;
+  --popup: #20242c;
+  --line: #262a33;
+  --hover: #1b1e25;
+  --current: #222733;
+  --fg: #d4d4d0;
+  --muted: #6b7280;
+  --faint: #4a505c;
+  --accent: #f0c674;
+  --accent-on: #1d1f24;
+  --ok: #98c379;
+  --error: #e06c75;
+  --busy: #8fb8de;
+  --added: #98c379;
+  --removed: #e06c75;
+  --pdf-bg: #2a2d34;
+  --outer: #0d0f13;
+  --panel-border: #2a2f39;
+  --page-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+
+  --ed-bg: #15171c;
+  --ed-fg: #d4d4d0;
+  --ed-line: #1c1f26;
+  --ed-selection: #2c3442;
+  --ed-selection-match: #262c36;
+  --ed-find: #4b4226;
+  --ed-gutter: #5c6370;
+  --ed-gutter-active: #d4d4d0;
+  --ed-cursor: #f0c674;
+  --ed-match: #3a4150;
+
+  --syn-command: #8fb8de;
+  --syn-arg: #c9a0dc;
+  --syn-math-delim: #d7a86e;
+  --syn-math: #b5bd68;
+  --syn-number: #de935f;
+  --syn-bracket: #9aa3ad;
+  --syn-comment: #6a7280;
+
+  color-scheme: dark;
+}
+
+/* thudal.com: the colours of the site (app/globals.css), square corners,
+   panels separated by single lines. Follows the system light/dark like the site. */
+:root[data-theme="thudal"] {
+  --bg: #b0cfd7;
+  --panel: #b0cfd7;
+  --popup: #b0cfd7;
+  --line: #39793c;
+  --hover: rgba(37, 49, 33, 0.07);
+  --current: rgba(37, 49, 33, 0.14);
+  --fg: #253121;
+  --muted: #39793c;
+  --faint: rgba(57, 121, 60, 0.55);
+  --accent: #ef805f;
+  --accent-on: #253121;
+  --ok: #39793c;
+  --error: #b8472a;
+  --busy: #253121;
+  --added: #39793c;
+  --removed: #b8472a;
+  --pdf-bg: #b0cfd7;
+  --outer: #b0cfd7;
+  --panel-border: #39793c;
+  --page-shadow: none;
+
+  --ed-bg: #b0cfd7;
+  --ed-fg: #253121;
+  --ed-line: rgba(37, 49, 33, 0.06);
+  --ed-selection: rgba(37, 49, 33, 0.2);
+  --ed-selection-match: rgba(37, 49, 33, 0.08);
+  --ed-find: rgba(239, 128, 95, 0.4);
+  --ed-gutter: rgba(57, 121, 60, 0.65);
+  --ed-gutter-active: #253121;
+  --ed-cursor: #253121;
+  --ed-match: rgba(239, 128, 95, 0.4);
+
+  --syn-command: #39793c;
+  --syn-arg: #253121;
+  --syn-math-delim: #b8472a;
+  --syn-math: #b8472a;
+  --syn-number: #b8472a;
+  --syn-bracket: rgba(37, 49, 33, 0.55);
+  --syn-comment: rgba(57, 121, 60, 0.8);
+
+  color-scheme: light;
+}
+/* thudal.com, dark: black paper, red ink (after the site's dark travel map). */
+:root[data-theme="thudal"][data-mode="dark"] {
+  --pdf-paper: #000000;
+  --pdf-ink: #e2281e;
+  --bg: #000000;
+  --panel: #000000;
+  --popup: #0b0000;
+  --line: #6e1410;
+  --hover: rgba(226, 40, 30, 0.12);
+  --current: rgba(226, 40, 30, 0.22);
+  --fg: #e2281e;
+  --muted: #a8211a;
+  --faint: rgba(168, 33, 26, 0.6);
+  --accent: #ff7466;
+  --accent-on: #000000;
+  --ok: #e2281e;
+  --error: #ff7466;
+  --busy: #e2281e;
+  --added: #e2281e;
+  --removed: #ff7466;
+  --pdf-bg: #000000;
+  --outer: #000000;
+  --panel-border: #6e1410;
+  --ed-bg: #000000;
+  --ed-fg: #e2281e;
+  --ed-line: rgba(226, 40, 30, 0.08);
+  --ed-selection: rgba(226, 40, 30, 0.3);
+  --ed-selection-match: rgba(226, 40, 30, 0.14);
+  --ed-find: rgba(255, 116, 102, 0.35);
+  --ed-gutter: #6e1410;
+  --ed-gutter-active: #e2281e;
+  --ed-cursor: #ff7466;
+  --ed-match: rgba(255, 116, 102, 0.35);
+  --syn-command: #ff4a3d;
+  --syn-arg: #e2281e;
+  --syn-math-delim: #ff7466;
+  --syn-math: #ff7466;
+  --syn-number: #ff7466;
+  --syn-bracket: #8c1b14;
+  --syn-comment: #8c1b14;
+  color-scheme: dark;
+}
+
+:root {
+  --mono: "Fira Code", "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --code: "Fira Code", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --editor-size: 13.5px;
+  --r: 5px;          /* buttons, inputs */
+  --r-panel: 10px;   /* panels, menus */
+  --r-mark: 3px;     /* sync highlight */
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--fg);
+  font: 13px/1.4 var(--mono);
+  font-variant-ligatures: contextual common-ligatures;
+  overflow: hidden;
+}
+body.resizing { cursor: col-resize; user-select: none; }
+body.resizing #pdf, body.resizing #editor { pointer-events: none; }
+[hidden] { display: none !important; }
+
+button, input, select {
+  font: inherit;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 2px 8px;
+}
+button { cursor: pointer; }
+button:hover, select:hover { border-color: var(--muted); }
+button.primary { border-color: var(--accent); color: var(--accent); }
+button.danger { border-color: var(--error); color: var(--error); }
+button.icon { padding: 0 7px; min-width: 28px; }
+input:focus, select:focus, button:focus-visible { outline: 1px solid var(--accent); outline-offset: -1px; }
+.muted { color: var(--muted); }
+
+textarea { font: inherit; color: var(--fg); }
+svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+#home-view, #editor-view { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--outer); }
+
+/* ------------------------------------------------ home (project list) */
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 14px;
+  flex: none;
+}
+.brand { font-weight: 600; letter-spacing: 0.02em; color: var(--fg); text-decoration: none; white-space: nowrap; }
+.brand span { color: var(--muted); font-weight: 400; }
+.spacer { flex: 1; }
+#home { flex: 1; overflow: auto; }
+.home-inner { max-width: 760px; margin: 0 auto; padding: 40px 20px; }
+.home-inner h1 { font-size: 15px; font-weight: 600; margin: 0 0 16px; color: var(--muted); }
+.projects { list-style: none; margin: 0 0 32px; padding: 0; border-top: 1px solid var(--line); }
+.projects li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.projects li:hover { background: var(--hover); }
+.projects .name { font-weight: 600; color: var(--fg); }
+.projects .when { color: var(--muted); text-align: right; }
+.projects .last { grid-column: 1 / -1; color: var(--muted); }
+.new-project { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.new-project input { width: 18em; }
+.hint { color: var(--muted); margin-top: 8px; }
+
+/* ------------------------------------------------ columns: three rounded panels */
+
+/* column widths, shared by the columns and the status bar under them (set by the script) */
+#editor-view { --tree-w: 240px; --pdf-w: 1fr; }
+#cols {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--tree-w) 6px minmax(260px, 1fr) 6px var(--pdf-w);
+  padding: 6px 6px 0;
+  background: var(--outer);
+}
+#cols.no-tree, #statusbar.no-tree { grid-template-columns: 0 0 minmax(260px, 1fr) 6px var(--pdf-w); }
+#cols.no-tree #tree-col, #cols.no-tree .gutter[data-resize="tree"] { visibility: hidden; }
+.gutter { position: relative; cursor: col-resize; }
+.gutter:hover::after {
+  content: "";
+  position: absolute;
+  inset: 12px 2px;
+  border-radius: 2px;
+  background: var(--panel-border);
+}
+#tree-col, #editor-col, #pdf-col {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+}
+#tree-col { background: var(--panel); }
+#editor-col { background: var(--ed-bg); position: relative; }
+#pdf-col { background: var(--pdf-bg); position: relative; }
+
+.col-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 34px;
+  padding: 0 10px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  flex: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.col-head button { padding: 0 7px; line-height: 1.4; }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: var(--r);
+  color: var(--muted);
+}
+.icon-btn:hover { background: var(--hover); color: var(--fg); }
+
+/* ------------------------------------------------ sidebar */
+
+.side-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 6px 0 12px;
+  flex: none;
+}
+.tabs { display: flex; gap: 2px; padding: 0 8px; border-bottom: 1px solid var(--line); flex: none; }
+.tabs button { border: none; padding: 4px 6px 6px; color: var(--muted); border-radius: 0; }
+.tabs button.active { color: var(--fg); box-shadow: inset 0 -2px 0 var(--accent); }
+#tab-changes { color: var(--accent); }
+
+.pane { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.proj-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  padding: 0 4px 0 12px;
+  flex: none;
+}
+/* the project name, in its own case, over the whole row */
+.doc-name { cursor: text; flex: 1; min-width: 0; font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* renaming: the same text at the same place, only underlined by the field */
+.doc-name input.rename,
+.doc-name input.rename:focus {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  box-shadow: inset 0 -1px 0 var(--accent); /* the underline, drawn inside: the text does not move */
+}
+[data-theme="thudal"] .doc-name input.rename { box-shadow: inset 0 -1px 0 var(--fg); }
+/* the icons only show on hover, over the end of the row: the name gets the full width */
+.proj-row { position: relative; }
+.row-actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 4px 0 16px;
+  background: linear-gradient(to right, transparent, var(--panel) 14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+#tree-col:hover .row-actions, .row-actions:focus-within { pointer-events: auto; }
+.proj-row.renaming .row-actions { display: none; }
+.row-actions:focus-within { opacity: 1; }
+#tree-col:hover .row-actions { opacity: 1; }
+
+#tree, .list { list-style: none; margin: 0; padding: 2px 0 8px; overflow: auto; }
+#tree { flex: 1; }
+#tree li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px 2px calc(20px + var(--depth) * 14px);
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+}
+#tree li .label { overflow: hidden; text-overflow: ellipsis; flex: 1; }
+#tree li:hover, .list li:hover { background: var(--hover); }
+#tree li.dir { color: var(--muted); }
+#tree li.dir::before { content: "▾"; position: absolute; left: calc(8px + var(--depth) * 14px); }
+#tree li.dir.closed::before { content: "▸"; }
+/* one selection at a time: the file you opened, or the folder you clicked
+   (where "new file" goes) */
+#tree li.selected { background: var(--current); }
+#tree li.file.main .label { font-weight: 600; } /* the main file (the one compiled) */
+#tree li.file.binary { color: var(--faint); cursor: default; }
+#tree li.file.has-error .label { color: var(--error); }
+#tree li.file.dirty .label::after { content: " ●"; color: var(--accent); }
+#tree li.naming { cursor: default; }
+#tree li.naming:hover { background: none; }
+#tree li.naming input {
+  width: 100%;
+  padding: 1px 6px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r);
+  background: var(--ed-bg);
+  outline: none;
+}
+.vcs { font-size: 11px; font-weight: 600; flex: none; }
+.vcs-M { color: var(--busy); }
+.vcs-A, .vcs-U { color: var(--ok); }
+.vcs-D { color: var(--removed); }
+.vcs-R { color: var(--accent); }
+
+/* ------------------------------------------------ versioning */
+
+.commit-box { display: flex; flex-direction: column; gap: 6px; padding: 10px 10px 6px; flex: none; }
+#commit-msg {
+  resize: vertical;
+  min-height: 2.8em;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--ed-bg);
+  outline: none;
+}
+#commit-msg:focus { border-color: var(--accent); }
+#commit-btn { width: 100%; padding: 4px; background: var(--accent); color: var(--accent-on); border-color: var(--accent); font-weight: 600; }
+#commit-btn:hover { filter: brightness(1.05); }
+.section-title { padding: 8px 12px 2px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); flex: none; }
+#changes { flex: none; max-height: 35%; }
+#history { flex: 1; }
+.list li { padding: 4px 12px; cursor: pointer; }
+.list li.change { display: flex; gap: 8px; align-items: center; }
+.list li.change .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* history as a git graph: one line, one dot per commit, the latest one filled */
+.list li.commit { --graph: var(--accent); --dot: 14px; position: relative; padding: 6px 12px 6px 34px; }
+.list li.commit::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--graph);
+}
+.list li.commit:first-child::before { top: var(--dot); }
+.list li.commit:last-child::before { bottom: calc(100% - var(--dot)); }
+.list li.commit:only-child::before { display: none; }
+.list li.commit::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: calc(var(--dot) - 5px);
+  width: 10px;
+  height: 10px;
+  box-sizing: border-box;
+  border: 2px solid var(--graph);
+  border-radius: 50%;
+  background: var(--panel);
+}
+.list li.commit:first-child::after { background: var(--graph); }
+.list li.current { background: var(--current); }
+.list li.empty { cursor: default; color: var(--muted); }
+.list li.empty:hover { background: none; }
+.list .subject { color: var(--fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.list .meta { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list .meta b { color: var(--accent); font-weight: 400; }
+
+/* ------------------------------------------------ editor */
+
+#editor { flex: 1; min-height: 0; overflow: hidden; }
+#editor .cm-editor { height: 100%; }
+#editor .cm-editor.cm-focused { outline: none; }
+#problems {
+  flex: none;
+  max-height: 30%;
+  overflow: auto;
+  border-top: 1px solid var(--line);
+  background: var(--panel);
+  padding: 4px 0;
+}
+.problem { display: flex; gap: 12px; padding: 2px 10px; }
+.problem .where { color: var(--error); flex: none; }
+.problem.note { color: var(--muted); }
+.problem.note .where { color: var(--accent); }
+.problem.link { cursor: pointer; }
+.problem.link:hover { background: var(--hover); }
+.problem span:last-child { white-space: pre-wrap; }
+
+/* commit detail, shown over the editor */
+#commit-view {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--ed-bg);
+  z-index: 5;
+}
+#commit-view .col-head { color: var(--fg); }
+#commit-view .actions { display: flex; gap: 6px; }
+#commit-patch { flex: 1; overflow: auto; margin: 0; padding: 10px 12px; font: 12.5px/1.5 var(--mono); color: var(--ed-fg); }
+#commit-patch .add { color: var(--added); }
+#commit-patch .del { color: var(--removed); }
+#commit-patch .hunk { color: var(--busy); }
+#commit-patch .file { color: var(--fg); font-weight: 600; }
+
+/* ------------------------------------------------ pdf */
+
+#pdf { flex: 1; min-height: 0; overflow: auto; background: var(--pdf-bg); position: relative; }
+.pdf-pages { will-change: transform; display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 0; min-width: min-content; }
+.pdf-page { position: relative; background: #fff; flex: none; }
+/* the line between two pages, only as wide as the page (zoomed out, the sides stay the panel colour) */
+.pdf-page + .pdf-page::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--line); }
+.pdf-page canvas { display: block; width: 100%; height: 100%; }
+#pdf.recolor .pdf-page { background: var(--pdf-paper); }
+#pdf.recolor .pdf-page canvas { filter: url(#pdf-recolor); }
+.sync-mark {
+  position: absolute;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  outline: 2px solid var(--accent);
+  border-radius: var(--r-mark);
+  animation: sync-fade 1.6s ease-out forwards;
+}
+@keyframes sync-fade { 0%, 60% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ------------------------------------------------ status bar */
+
+#statusbar {
+  display: grid;
+  grid-template-columns: var(--tree-w) 6px minmax(260px, 1fr) 6px var(--pdf-w); /* same as the columns */
+  align-items: stretch;
+  height: 28px;
+  padding: 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+  flex: none;
+  white-space: nowrap;
+}
+#statusbar .seg { display: flex; align-items: center; gap: 2px; min-width: 0; overflow: hidden; }
+#statusbar.no-tree #sb-tree { visibility: hidden; padding: 0 !important; }
+.sb-group { display: flex; align-items: center; gap: 2px; flex: none; }
+#sb-pdf .sb-zoom { flex: 1; display: flex; justify-content: center; }
+#sb-pdf #download-btn { margin-left: auto; }
+.sb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 7px;
+  border: none;
+  border-radius: var(--r);
+  color: inherit;
+  flex: none;
+}
+button.sb-item:hover, a.sb-item:hover { background: var(--hover); color: var(--fg); }
+a.sb-item { text-decoration: none; }
+.sb-item svg { width: 14px; height: 14px; }
+#sb-problems[hidden] { display: none; }
+#sb-problems.has-errors { color: var(--error); }
+#statusbar button.active { color: var(--accent); }
+.sb-item.vim { color: var(--fg); letter-spacing: 0.02em; }
+.sb-item.vim[data-mode="insert"] { color: var(--accent); }
+.sb-item.vim[data-mode="visual"] { color: var(--busy); }
+.status.ok { color: var(--ok); }
+.status.error { color: var(--error); }
+.status.busy { color: var(--busy); }
+
+.sb-message {
+  flex: 1;
+  min-width: 0;
+  padding: 0 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--fg);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.sb-message.show { opacity: 1; }
+.sb-message.ok { color: var(--ok); }
+.sb-message.error { color: var(--error); }
+
+/* gear menu */
+.menu-field { display: flex; align-items: center; gap: 6px; padding: 0 10px 6px; color: var(--muted); }
+.menu-field input { width: 5em; padding: 1px 4px; text-align: right; font: inherit; }
+.menu-field input { -moz-appearance: textfield; appearance: textfield; }
+.menu-field input::-webkit-inner-spin-button, .menu-field input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+[data-theme="thudal"] .menu-field { padding: 0 1rem 0.5rem; font-size: 0.875rem; }
+[data-theme="thudal"] .menu-field input { background: transparent; border: none; border-bottom: 1px solid var(--line); }
+.menu {
+  position: fixed;
+  left: 8px;
+  bottom: 32px;
+  min-width: 190px;
+  padding: 4px;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-panel);
+  background: var(--popup);
+  box-shadow: var(--page-shadow);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+}
+.menu button { border: none; text-align: left; padding: 5px 10px; border-radius: var(--r); }
+.menu button:hover { background: var(--hover); }
+.menu hr { border: none; border-top: 1px solid var(--line); margin: 4px 0; }
+.menu-label { padding: 4px 10px 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.menu-choice { display: flex; gap: 2px; padding: 0 4px 4px; }
+.menu-choice button { flex: 1; text-align: center; }
+.menu-choice button.active { color: var(--accent); background: var(--hover); }
+[data-theme="thudal"] .menu-choice button.active { color: var(--bg); background: var(--fg); }
+[data-theme="thudal"] .menu-label { font-size: 0.875rem; letter-spacing: 0; color: var(--muted); padding: 0.5rem 1rem 0.25rem; }
+
+/* ------------------------------------------------ toast */
+
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 40px;
+  max-width: 480px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+  background: var(--popup);
+  box-shadow: var(--page-shadow);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.15s, transform 0.15s;
+  pointer-events: none;
+  white-space: pre-wrap;
+  z-index: 10;
+}
+.toast.show { opacity: 1; transform: none; }
+.toast.error { border-color: var(--error); }
+.toast.ok { border-color: var(--ok); }
+
+/* ------------------------------------------------ narrow screens: stack editor over preview */
+
+@media (max-width: 800px) {
+  body { overflow: auto; }
+  #cols, #cols.no-tree { display: flex; flex-direction: column; gap: 6px; }
+  #tree-col { max-height: 30vh; }
+  #cols.no-tree #tree-col { display: none; }
+  #editor-col, #pdf-col { min-height: 70vh; }
+  .gutter { display: none; }
+  #statusbar, #statusbar.no-tree { display: flex; }
+  #statusbar .sb-gap, #sb-tree:empty { display: none; }
+  #sb-editor { flex: 1; }
+}
+
+/* ------------------------------------------------ thudal theme: layout */
+
+:root[data-theme="thudal"] {
+  --editor-size: 16px;   /* thudal.com: 16px text, 1.5 line height */
+  --editor-lh: 1.5;
+  --r: 0;
+  --r-panel: 0;
+  --r-mark: 0;
+  scrollbar-color: var(--accent) var(--line);
+}
+[data-theme="thudal"] #cols { padding: 0; grid-template-columns: var(--tree-w) 1px minmax(260px, 1fr) 1px var(--pdf-w); }
+[data-theme="thudal"] #cols.no-tree { grid-template-columns: 0 0 minmax(260px, 1fr) 1px var(--pdf-w); }
+[data-theme="thudal"] #tree-col,
+[data-theme="thudal"] #editor-col,
+[data-theme="thudal"] #pdf-col { border: none; }
+[data-theme="thudal"] .gutter { background: var(--line); z-index: 4; }
+[data-theme="thudal"] .gutter::before { content: ""; position: absolute; inset: 0 -3px; } /* wider grab area */
+[data-theme="thudal"] .gutter:hover::after { display: none; }
+[data-theme="thudal"] #statusbar { border-top: 1px solid var(--line); }
+[data-theme="thudal"] #statusbar .sb-gap { background: var(--line); } /* the column lines go on through the bar */
+[data-theme="thudal"] .side-head { border-bottom: 1px solid var(--line); height: 2.5rem; }
+[data-theme="thudal"] .brand { font-style: italic; font-weight: 400; text-decoration: underline; letter-spacing: 0; }
+[data-theme="thudal"] .brand span { color: inherit; }
+[data-theme="thudal"] .brand:hover { color: var(--bg); background: var(--fg); }
+[data-theme="thudal"] .tabs button { text-transform: uppercase; font-size: 12px; }
+[data-theme="thudal"] .tabs button.active { box-shadow: none; text-decoration: underline; text-underline-offset: 4px; }
+[data-theme="thudal"] .doc-name { font-weight: 400; }
+[data-theme="thudal"] .list li.current { background: var(--fg); color: var(--bg); }
+[data-theme="thudal"] .list li.current .meta,
+[data-theme="thudal"] .list li.current .subject { color: var(--bg); }
+[data-theme="thudal"] #tree li.dir { color: var(--fg); }
+[data-theme="thudal"] button, [data-theme="thudal"] select { border-color: var(--line); }
+[data-theme="thudal"] input:focus, [data-theme="thudal"] select:focus { outline: none; border-color: var(--fg); }
+[data-theme="thudal"] #commit-msg { background: transparent; border-color: var(--line); }
+[data-theme="thudal"] #commit-btn {
+  background: none;
+  border: none;
+  color: var(--fg);
+  font-weight: 400;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 4px;
+  text-align: left;
+  padding: 2px 0;
+}
+[data-theme="thudal"] #commit-btn:hover { color: var(--bg); background: var(--fg); filter: none; }
+[data-theme="thudal"] #tree li.naming input { background: transparent; border: none; border-bottom: 1px solid var(--fg); }
+[data-theme="thudal"] .pdf-page { box-shadow: none; }
+[data-theme="thudal"] .menu { border-color: var(--line); box-shadow: none; }
+[data-theme="thudal"] .menu button:hover,
+[data-theme="thudal"] button.sb-item:hover,
+[data-theme="thudal"] a.sb-item:hover,
+[data-theme="thudal"] .icon-btn:hover { background: var(--fg); color: var(--bg); }
+[data-theme="thudal"] .toast { box-shadow: none; }
+[data-theme="thudal"] .projects li:hover { background: var(--fg); color: var(--bg); }
+[data-theme="thudal"] .projects li:hover .name,
+[data-theme="thudal"] .projects li:hover .when,
+[data-theme="thudal"] .projects li:hover .last { color: var(--bg); }
+[data-theme="thudal"] .bar { border-bottom: 1px solid var(--line); }
+
+/* thudal: the sizes of thudal.com (Tailwind defaults it uses):
+   text 16px / 1.5, labels text-sm (14px) uppercase, bars h-10 (40px), padding px-4 (16px). */
+[data-theme="thudal"] body { font-size: 16px; line-height: 1.5; }
+[data-theme="thudal"] .side-head { height: 2.5rem; padding: 0 0.5rem 0 1rem; }
+[data-theme="thudal"] .tabs { gap: 1.5rem; padding: 0 1rem; }
+[data-theme="thudal"] .tabs button { font-size: 0.875rem; padding: 0.5rem 0; }
+[data-theme="thudal"] .proj-row { height: 2.5rem; padding: 0 0.5rem 0 1rem; border-bottom: 1px solid var(--line); }
+[data-theme="thudal"] .doc-name { font-size: 0.875rem; }
+[data-theme="thudal"] #tree { padding: 0.25rem 0 1rem; }
+[data-theme="thudal"] #tree li { padding: 0 1rem 0 calc(1.75rem + var(--depth) * 1rem); }
+[data-theme="thudal"] #tree li.dir::before { left: calc(0.75rem + var(--depth) * 1rem); }
+[data-theme="thudal"] .vcs { font-size: 0.75rem; }
+[data-theme="thudal"] .commit-box { padding: 1rem; gap: 0.75rem; }
+[data-theme="thudal"] .section-title { font-size: 0.875rem; font-weight: 400; letter-spacing: 0; color: var(--line); padding: 0.75rem 1rem 0.25rem; }
+[data-theme="thudal"] .list li { padding: 0.25rem 1rem; }
+[data-theme="thudal"] .list li.commit { --graph: var(--line); --dot: 1.5rem; padding: 0.5rem 1rem 0.5rem 2.5rem; }
+[data-theme="thudal"] .list li.commit::before { left: 1.1rem; }
+[data-theme="thudal"] .list li.commit::after { left: calc(1.1rem - 4px); }
+[data-theme="thudal"] .list .meta { font-size: 0.875rem; }
+[data-theme="thudal"] .list .meta b { color: var(--line); }
+[data-theme="thudal"] #statusbar { grid-template-columns: var(--tree-w) 1px minmax(260px, 1fr) 1px var(--pdf-w); height: 2.5rem; padding: 0; font-size: 0.875rem; color: var(--fg); }
+[data-theme="thudal"] #statusbar.no-tree { grid-template-columns: 0 0 minmax(260px, 1fr) 1px var(--pdf-w); }
+[data-theme="thudal"] #statusbar .seg { padding: 0 0.5rem; }
+[data-theme="thudal"] .sb-item { height: 1.75rem; padding: 0 0.5rem; }
+[data-theme="thudal"] .sb-item svg { width: 16px; height: 16px; }
+[data-theme="thudal"] #problems { font-size: 0.875rem; }
+[data-theme="thudal"] .menu { bottom: 2.75rem; }
+[data-theme="thudal"] .menu button { font-size: 0.875rem; text-transform: uppercase; padding: 0.5rem 1rem; }
+[data-theme="thudal"] .bar { height: 2.5rem; padding: 0 1rem; }
+[data-theme="thudal"] .home-inner h1 { font-size: 0.875rem; font-weight: 400; text-transform: uppercase; color: var(--line); }
+[data-theme="thudal"] .projects .name { font-weight: 400; }
+[data-theme="thudal"] .projects .last, [data-theme="thudal"] .projects .when { font-size: 0.875rem; }
+
+/* thudal tree: hover = underlined; selected = black background + underlined.
+   One selection at a time, never grey. */
+[data-theme="thudal"] #tree li:not(.selected):hover,
+[data-theme="thudal"] .list li:not(.current):hover { background: none; }
+[data-theme="thudal"] #tree li .label { flex: 0 1 auto; }
+[data-theme="thudal"] #tree li:not(.naming):hover .label,
+[data-theme="thudal"] .list li.change:hover .label,
+[data-theme="thudal"] .list li.commit:hover .subject { text-decoration: underline; }
+[data-theme="thudal"] #tree li.selected,
+[data-theme="thudal"] #tree li.selected:hover { background: var(--fg); color: var(--bg); }
+[data-theme="thudal"] #tree li.selected .label { text-decoration: underline; }
+[data-theme="thudal"] #tree li.selected .vcs { color: var(--bg); }
+[data-theme="thudal"] .list .subject { display: inline-block; max-width: 100%; vertical-align: top; }

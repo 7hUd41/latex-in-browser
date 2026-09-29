@@ -1,0 +1,7 @@
+# Block appended to /etc/caddy/Caddyfile.
+# The login is handled by the editor itself (login page + cookie).
+latex.thudal.com {
+	encode zstd gzip
+	header X-Robots-Tag "noindex, nofollow"
+	reverse_proxy 127.0.0.1:8090
+}

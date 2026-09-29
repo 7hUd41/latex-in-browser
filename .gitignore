@@ -1,0 +1,20 @@
+# Dependencies (dev tools only: npm install)
+node_modules/
+
+# Local test documents (npm run dev)
+dev-docs/
+
+# Secrets: login settings made by server/hash-password.js
+*.env
+latex-auth.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editors and systems
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
