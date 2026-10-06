@@ -771,11 +771,23 @@ const CSP = [
   "frame-ancestors 'none'",
 ].join('; ');
 
+// index.html: the links to the CSS and JS carry the file's modification time
+// (style.css?v=…), so after a deploy no browser keeps running an old copy.
+async function withVersions(html) {
+  let out = html;
+  for (const name of ['style.css', 'theme.js', 'app.js']) {
+    const st = await fsp.stat(path.join(CONFIG.publicDir, name)).catch(() => null);
+    if (st) out = out.replace(`"${name}"`, `"${name}?v=${Math.floor(st.mtimeMs).toString(36)}"`);
+  }
+  return out;
+}
+
 async function serveStatic(req, res, pathname) {
   const rel = pathname === '/' ? 'index.html' : pathname.slice(1);
   if (!/^(fonts\/)?[A-Za-z0-9_-][A-Za-z0-9._-]*$/.test(rel)) throw new HttpError(404, 'not found');
   const file = path.join(CONFIG.publicDir, rel);
-  const data = await fsp.readFile(file).catch(() => { throw new HttpError(404, 'not found'); });
+  let data = await fsp.readFile(file).catch(() => { throw new HttpError(404, 'not found'); });
+  if (rel === 'index.html') data = Buffer.from(await withVersions(data.toString('utf8')));
   res.writeHead(200, {
     'Content-Type': MIME[path.extname(rel)] || 'application/octet-stream',
     'Cache-Control': rel === 'index.html' ? 'no-cache' : rel.startsWith('fonts/') ? 'public, max-age=604800' : 'public, max-age=300',
@@ -847,6 +859,32 @@ async function handleApi(req, res, url) {
     const data = await fsp.readFile(pdf).catch(() => { throw new HttpError(404, 'no PDF yet'); });
     res.writeHead(200, { 'Content-Type': 'application/pdf', 'Cache-Control': 'no-store' });
     return res.end(data);
+  }
+
+  // The project's sources as a .tar.gz, streamed: no build output, no git
+  // history, no hidden files, no server user names (numeric ids only).
+  if (action === 'archive' && req.method === 'GET') {
+    const day = new Date().toISOString().slice(0, 10);
+    const tar = spawn('tar', [
+      '-czf', '-', '--exclude', `${doc}/${BUILD_DIR}`, '--exclude', '.*',
+      '--numeric-owner', '-C', CONFIG.docsDir, doc, // options GNU tar and macOS tar both know
+    ], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stderr = '';
+    tar.stderr.on('data', (d) => { stderr += d; });
+    await new Promise((resolve, reject) => { tar.once('spawn', resolve); tar.once('error', reject); });
+    res.writeHead(200, {
+      'Content-Type': 'application/gzip',
+      'Content-Disposition': `attachment; filename="${doc}-${day}.tar.gz"`, // doc matches DOC_RE: no quotes
+      'Cache-Control': 'no-store',
+    });
+    tar.stdout.pipe(res);
+    res.on('close', () => tar.kill());
+    return new Promise((resolve) => {
+      tar.on('close', (code) => {
+        if (code !== 0) { console.error(`archive ${doc}: tar exited ${code}: ${stderr.trim()}`); res.destroy(); }
+        resolve();
+      });
+    });
   }
 
   if (action === 'status' && req.method === 'GET') {

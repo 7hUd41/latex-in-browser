@@ -22,6 +22,7 @@
       <symbol id="i-warning" viewBox="0 0 16 16"><path d="M8 2l6.5 11.5h-13z"/><path d="M8 6.5v3.2M8 11.4v.1"/></symbol>
       <symbol id="i-close" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></symbol>
       <symbol id="i-branch" viewBox="0 0 16 16"><circle cx="4.5" cy="3.5" r="1.5"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="5.5" r="1.5"/><path d="M4.5 5v6M11.5 7c0 3-7 2-7 4"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="3" rx="0.5"/><path d="M2.5 5.5v7a1 1 0 0 0 1 1h9a1 1 0 0 0 1-1v-7"/><path d="M8 7.5v4M6 9.5l2 2 2-2"/></symbol>
       <symbol id="i-download" viewBox="0 0 16 16"><path d="M8 2v8.5M4.5 7L8 10.5 11.5 7M2.5 13.5h11"/></symbol>
     </defs>
   </svg>
@@ -128,6 +129,7 @@
           <button class="sb-item" data-action="toggle-tree" type="button" title="Show / hide the sidebar (Cmd/Ctrl-B)"><svg><use href="#i-sidebar"/></svg></button>
           <button id="sb-changes" class="sb-item" type="button" title="Versioning: commit, changes, history"><svg><use href="#i-branch"/></svg><span id="sb-changes-n"></span></button>
         </div>
+        <button id="archive-btn" class="sb-item" type="button" title="Download the project sources (.tar.gz, without build/ and history)"><svg><use href="#i-archive"/></svg></button>
       </div>
       <div class="sb-gap"></div>
       <div id="sb-editor" class="seg">

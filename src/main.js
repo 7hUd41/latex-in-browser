@@ -295,6 +295,18 @@ $('download-btn').addEventListener('click', (e) => {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 });
+// The project's sources: save first, so the archive has the latest edits.
+$('archive-btn').addEventListener('click', async (e) => {
+  e.preventDefault();
+  if (!S.doc) return;
+  await flush();
+  const a = document.createElement('a');
+  a.href = api.archiveUrl(S.doc);
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
 function toggleMode() {
   setLook({ mode: document.documentElement.dataset.mode === 'dark' ? 'light' : 'dark' });
 }
@@ -604,6 +616,7 @@ function applyTreeVisibility() {
   $('statusbar').classList.toggle('no-tree', !S.showTree);
   // settings / sidebar / versioning sit under the tree, or under the editor when it is hidden
   (S.showTree ? $('sb-tree') : $('sb-editor')).prepend($('sb-side'));
+  if (S.showTree) $('sb-tree').append($('archive-btn')); else $('sb-side').after($('archive-btn'));
 }
 function toggleTree() {
   S.showTree = !S.showTree;

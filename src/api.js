@@ -35,4 +35,5 @@ export const api = {
   syncEdit: (doc, page, x, y) => request('GET', `/api/docs/${enc(doc)}/sync-edit?page=${page}&x=${x}&y=${y}`),
   logout: () => request('POST', '/api/logout', {}),
   pdfUrl: (doc) => `/api/docs/${enc(doc)}/pdf?t=${Date.now()}`,
+  archiveUrl: (doc) => `/api/docs/${enc(doc)}/archive`,
 };

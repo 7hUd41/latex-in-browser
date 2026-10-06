@@ -40,8 +40,9 @@ It runs on latex.thudal.com. A public demo is coming.
   of thudal.com), each light or dark. In dark mode the preview takes the theme's
   paper and ink; the downloaded PDF keeps its normal colours.
 - **Status bar** split under the three columns: settings, sidebar and versioning
-  under the files; vim mode, messages and errors under the editor; compile time,
-  zoom and download under the PDF.
+  under the files, with a button that downloads the project's sources (`.tar.gz`,
+  without `build/` and the git history); vim mode, messages and errors under the
+  editor; compile time, zoom and download under the PDF.
 
 Font: Fira Code with ligatures, everywhere.
 

@@ -568,7 +568,7 @@ svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width:
 #statusbar.no-tree #sb-tree { visibility: hidden; padding: 0 !important; }
 .sb-group { display: flex; align-items: center; gap: 2px; flex: none; }
 #sb-pdf .sb-zoom { flex: 1; display: flex; justify-content: center; }
-#sb-pdf #download-btn { margin-left: auto; }
+#sb-pdf #download-btn, #sb-tree #archive-btn { margin-left: auto; }
 .sb-item {
   display: inline-flex;
   align-items: center;
